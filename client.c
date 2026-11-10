@@ -6,13 +6,12 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:43:48 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/05/06 20:07:20 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:26:57 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "ft_printf/ft_printf.h"
 
 int	ft_atoi(const char *str)
@@ -56,40 +55,18 @@ void	send_message(pid_t pid, char letter)
 		j--;
 	}
 }
-bool check_pid(char *av)
-{
-	int		i;
-	
-	i = 0;
-	while(av[i])
-	{
-		ft_printf("while\n");
-		if (!(av[i] >= '0' && av[i] <= '9') && (av[i] != '+'))
-			return (false);
-		i++;
-	}
-	return (true);
-}
 
 pid_t	get_pid(char *av)
 {
-	int	pid;
+	pid_t	pid;
 
-	if (!check_pid(av))
+	pid = ft_atoi(av);
+	if (pid <= 0)
 	{
-		ft_printf("pid is non numeric\n");
+		ft_printf("Invalid pid\n");
 		exit(1);
 	}
-	else
-	{
-		pid = ft_atoi(av);
-		// if (pid <= 0)
-		// {
-		// 	ft_printf("Invalid pid\n");
-		// 	exit(1);
-		// }
-		return (pid);
-	}
+	return (pid);
 }
 
 int	main(int ac, char **av)
@@ -101,7 +78,6 @@ int	main(int ac, char **av)
 	if (ac == 3)
 	{
 		pid = get_pid(av[1]);
-		ft_printf("pid %d", pid);
 		if (kill(pid, 0) == -1)
 		{
 			ft_printf("Invalid PID");
